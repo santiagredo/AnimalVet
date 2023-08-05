@@ -1,11 +1,11 @@
 import '../styles/Header.css'
-import logo from '../images/logo.jpg'
+//import logo from '../images/logo.jpg'
 
 export function Header(){
     return(
 
         <header className="container-header">
-            {/* <img src={logo} alt="Logo" className="logo-header" /> */}
+            {/* <img src='../images/logo.jpg' alt="Logo" className="logo-header" /> */}
             <p className="nombre">Dra Erika Mayte Murcia Agudelo</p>
             <nav className="list-header">
                 <li className="list-header__item">Home</li>
