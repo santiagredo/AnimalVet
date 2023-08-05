@@ -14,7 +14,7 @@
 
 .title {
   text-align: center;
-  margin: 10px 0 30px;
+  margin: 0 0 30px;
   color: var(--Blue-letter);
   font-size: 50px;
   font-weight: 800;
@@ -53,6 +53,9 @@
 
 .list-item__paragraph {
   height: 5%;
+  width: 70%;
+  margin: auto;
+  font-size: 16px;
 }
 
 .list-item__btn {
