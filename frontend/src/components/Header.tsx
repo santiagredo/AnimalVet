@@ -12,7 +12,11 @@ export function Header(){
                 <li className="list-header__item">Citas</li>
                 <li className="list-header__item">Contacto</li>
             </nav>
-            <button className="whatsApp">WhatsApp</button>
+            <div className="whatsApp">
+            <a
+        href="https://api.whatsapp.com/send?phone=573114768615"
+        target="_blank"
+      >WhatsApp</a></div>
         </header>
        
     )
