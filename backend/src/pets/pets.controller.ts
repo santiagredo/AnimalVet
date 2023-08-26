@@ -9,12 +9,15 @@ import {
     NotFoundException,
     BadRequestException,
     HttpCode,
+    UseGuards,
 } from '@nestjs/common';
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
 import { Types } from 'mongoose';
+import { JwtAuthGuard } from 'src/users/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('pets')
 export class PetsController {
     constructor(private readonly petsService: PetsService) {}

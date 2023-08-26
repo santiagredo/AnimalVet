@@ -1,34 +1,82 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    InternalServerErrorException,
+    BadRequestException,
+    NotFoundException,
+} from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { Types } from 'mongoose';
 
 @Controller('appointments')
 export class AppointmentsController {
-  constructor(private readonly appointmentsService: AppointmentsService) {}
+    constructor(private readonly appointmentsService: AppointmentsService) {}
 
-  @Post()
-  create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    return this.appointmentsService.create(createAppointmentDto);
-  }
+    @Post()
+    async create(@Body() createAppointmentDto: CreateAppointmentDto) {
+        try {
+            return this.appointmentsService.createAppointment(
+                createAppointmentDto,
+            );
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
 
-  @Get()
-  findAll() {
-    return this.appointmentsService.findAll();
-  }
+    @Get()
+    async findAll() {
+        try {
+            return this.appointmentsService.findAllAppointments();
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appointmentsService.findOne(+id);
-  }
+    @Get(':id')
+    async findOneAppointment(@Param('id') id: string) {
+        try {
+            return this.appointmentsService.findOneAppointment(id);
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAppointmentDto: UpdateAppointmentDto) {
-    return this.appointmentsService.update(+id, updateAppointmentDto);
-  }
+    @Patch(':id')
+    async update(
+        @Param('id') id: string,
+        @Body() updateAppointmentDto: UpdateAppointmentDto,
+    ) {
+        try {
+            return this.appointmentsService.updateAppointment(
+                new Types.ObjectId(id),
+                updateAppointmentDto,
+            );
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.appointmentsService.remove(+id);
-  }
+    @Delete(':id')
+    async remove(@Param('id') id: string) {
+        if (!Types.ObjectId.isValid(id)) {
+            throw new BadRequestException('Invalid appointment ID');
+        }
+
+        const appointment = await this.appointmentsService.deleteAppointment(
+            new Types.ObjectId(id),
+        );
+
+        if (!appointment.governmentID) {
+            throw new NotFoundException('Appointment not found');
+        }
+
+        return true;
+    }
 }

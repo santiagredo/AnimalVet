@@ -1,10 +1,16 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
-import { Types } from "mongoose";
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsNumber,
+    IsOptional,
+    IsString,
+    MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
     @IsNumber()
     @IsNotEmpty()
-    governmentID: number
+    governmentID: number;
 
     @IsString()
     @IsNotEmpty()
@@ -16,7 +22,8 @@ export class CreateUserDto {
 
     @IsNotEmpty()
     @IsString()
-    password: string
+    @MinLength(5)
+    password: string;
 
     @IsString()
     @IsNotEmpty()
@@ -28,9 +35,17 @@ export class CreateUserDto {
 
     @IsOptional()
     userPets?: UserPet[];
+
+    @IsOptional()
+    userAppointments?: UserAppointments[];
 }
 
 class UserPet {
     @IsNotEmpty()
-    _id: Types.ObjectId
+    _id: string;
+}
+
+class UserAppointments {
+    @IsNotEmpty()
+    _id: string;
 }

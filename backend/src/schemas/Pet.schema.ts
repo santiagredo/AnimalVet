@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({
     timestamps: true,
-    collection: "Pets"
+    collection: 'Pets',
 })
 export class Pet {
     @Prop({

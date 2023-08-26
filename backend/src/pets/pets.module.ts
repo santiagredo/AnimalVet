@@ -6,11 +6,16 @@ import { Pet, PetSchema } from 'src/schemas/Pet.schema';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{
-    name: Pet.name,
-    schema: PetSchema
-  }]), UsersModule],
-  controllers: [PetsController],
-  providers: [PetsService]
+    imports: [
+        MongooseModule.forFeature([
+            {
+                name: Pet.name,
+                schema: PetSchema,
+            },
+        ]),
+        UsersModule,
+    ],
+    controllers: [PetsController],
+    providers: [PetsService],
 })
 export class PetsModule {}

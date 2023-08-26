@@ -6,49 +6,43 @@ import {
     Patch,
     Param,
     Delete,
-    ConflictException,
     NotFoundException,
     HttpCode,
+    UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { LoginUserDto } from './dto/login-user.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
-    @Post()
+    @Post('create')
     async createUser(@Body() createUserDto: CreateUserDto) {
-        try {
-            return await this.usersService.createUser(createUserDto);
-        } catch (error) {
-            if (error.code === 11000) {
-                throw new ConflictException(
-                    'Government ID already associated to an existing account',
-                );
-            }
-
-            throw error;
-        }
+        return await this.usersService.createUser(createUserDto);
     }
 
+    @Post('login')
+    async loginUser(@Body() loginUserDto: LoginUserDto) {
+        return await this.usersService.loginUser(loginUserDto);
+    }
+
+    @UseGuards(JwtAuthGuard)
     @Get()
     async findAllUsers() {
         return await this.usersService.findAllUsers();
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findUser(@Param('id') id: string) {
-        const user = await this.usersService.findUser(Number(id));
-
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-
-        return user;
+        return await this.usersService.findUser(Number(id));
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch(':id')
     @HttpCode(202)
     async updateUser(
@@ -67,6 +61,7 @@ export class UsersController {
         return true;
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @HttpCode(202)
     async deleteUser(@Param('id') id: string) {

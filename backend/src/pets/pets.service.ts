@@ -56,8 +56,7 @@ export class PetsService {
             _id,
         });
 
-        if (!deletedPet)
-            throw new NotFoundException('Pet not found');
+        if (!deletedPet) throw new NotFoundException('Pet not found');
 
         await this.usersService.deleteUserPets(
             deletedPet.OwnerGovernmentID,

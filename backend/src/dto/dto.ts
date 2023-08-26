@@ -1,4 +1,3 @@
-
 // Latest cat appointment at 11:00 Am
 // No cat grooming on saturdays
 // Latest dog appointment at 15:00 Pm, no lunch time

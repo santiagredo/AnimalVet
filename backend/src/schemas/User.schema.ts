@@ -2,20 +2,26 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({
     timestamps: true,
-    collection: "Users"
+    collection: 'Users',
 })
 export class User {
     @Prop({
         trim: true,
-        unique: true
+        unique: true,
     })
     governmentID: number;
 
     @Prop({ trim: true })
     name: string;
 
-    @Prop({ trim: true })
+    @Prop({
+        trim: true,
+        unique: true,
+    })
     email: string;
+
+    @Prop({ trim: true })
+    password: string;
 
     @Prop({ trim: true })
     address: string;
@@ -25,10 +31,17 @@ export class User {
 
     @Prop()
     userPets?: UserPet[];
+
+    @Prop()
+    userAppointments?: UserAppointments[];
 }
 
 export class UserPet {
-    _id: string
+    _id: string;
+}
+
+export class UserAppointments {
+    _id: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

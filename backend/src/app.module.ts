@@ -5,12 +5,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
 import { PetsModule } from './pets/pets.module';
 import { AppointmentsModule } from './appointments/appointments.module';
-
-const uri ='mongodb://127.0.0.1:27017';
-const db = "AnimalVet";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-    imports: [MongooseModule.forRoot(uri, {dbName: db}), UsersModule, PetsModule, AppointmentsModule],
+    imports: [
+        MongooseModule.forRootAsync({
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => ({
+                uri: configService.get<string>('URI'),
+                dbName: configService.get<string>('DB'),
+            }),
+        }),
+        UsersModule,
+        PetsModule,
+        AppointmentsModule,
+        ConfigModule.forRoot({ isGlobal: true }),
+    ],
     controllers: [AppController],
     providers: [AppService],
 })
