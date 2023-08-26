@@ -9,7 +9,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { DeleteResult } from 'mongoose/node_modules/mongodb';
 import { User } from 'src/schemas/User.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { hash, compare } from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -31,8 +31,14 @@ export class UsersService {
 
             createUserDto = { ...createUserDto, password: plainToHash };
 
-            const newUser = new this.userModel(createUserDto);
-            return await newUser.save();
+            const user = await new this.userModel(createUserDto).save();
+            
+            const data = {
+                user,
+                token: this.generateJWT(user._id, user.name)
+            }
+
+            return data;
         } catch (error) {
             if (error.code === 11000) {
                 throw new ConflictException(
@@ -60,15 +66,18 @@ export class UsersService {
             throw new UnauthorizedException('Invalid password');
         }
 
-        const payload = { _id: user._id, name: user.name };
-        const token = this.jwtAuthService.sign(payload);
-
         const data = {
             user,
-            token,
+            token: this.generateJWT(user._id, user.name)
         };
-
+        
         return data;
+    }
+    
+    private generateJWT(_id: Types.ObjectId | string, name: string) {
+        const payload = { _id: _id, name: name };
+        const token = this.jwtAuthService.sign(payload);
+        return token;
     }
 
     async findAllUsers() {
