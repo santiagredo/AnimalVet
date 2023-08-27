@@ -20,7 +20,7 @@ export class AppointmentsController {
     constructor(private readonly appointmentsService: AppointmentsService) {}
 
     @Post()
-    async create(@Body() createAppointmentDto: CreateAppointmentDto) {
+    async createAppointment(@Body() createAppointmentDto: CreateAppointmentDto) {
         try {
             return this.appointmentsService.createAppointment(
                 createAppointmentDto,
@@ -31,7 +31,7 @@ export class AppointmentsController {
     }
 
     @Get()
-    async findAll() {
+    async findAllAppointmnets() {
         try {
             return this.appointmentsService.findAllAppointments();
         } catch (error) {
@@ -49,7 +49,7 @@ export class AppointmentsController {
     }
 
     @Patch(':id')
-    async update(
+    async updateAppointment(
         @Param('id') id: string,
         @Body() updateAppointmentDto: UpdateAppointmentDto,
     ) {
@@ -64,7 +64,7 @@ export class AppointmentsController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
+    async deleteAppointment(@Param('id') id: string) {
         if (!Types.ObjectId.isValid(id)) {
             throw new BadRequestException('Invalid appointment ID');
         }
