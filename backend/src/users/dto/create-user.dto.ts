@@ -4,10 +4,12 @@ import {
     IsNumber,
     IsOptional,
     IsString,
+    Min,
     MinLength,
 } from 'class-validator';
 
 export class CreateUserDto {
+    @Min(10000)
     @IsNumber()
     @IsNotEmpty()
     governmentID: number;
