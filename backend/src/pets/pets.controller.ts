@@ -23,17 +23,17 @@ export class PetsController {
     constructor(private readonly petsService: PetsService) {}
 
     @Post()
-    async create(@Body() createPetDto: CreatePetDto) {
+    async createPet(@Body() createPetDto: CreatePetDto) {
         return this.petsService.createPet(createPetDto);
     }
 
     @Get()
-    async findAll() {
+    async findAllPets() {
         return this.petsService.findAllPets();
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: string) {
+    async findPet(@Param('id') id: string) {
         if (!Types.ObjectId.isValid(id)) {
             throw new BadRequestException('Invalid pet ID');
         }
@@ -49,7 +49,7 @@ export class PetsController {
 
     @Patch(':id')
     @HttpCode(202)
-    async update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
+    async updatePet(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
         if (!Types.ObjectId.isValid(id)) {
             throw new BadRequestException('Invalid pet ID');
         }
@@ -67,7 +67,7 @@ export class PetsController {
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: string) {
+    async deletePet(@Param('id') id: string) {
         if (!Types.ObjectId.isValid(id)) {
             throw new BadRequestException('Invalid pet ID');
         }
