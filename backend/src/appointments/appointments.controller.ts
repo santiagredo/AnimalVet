@@ -9,12 +9,15 @@ import {
     InternalServerErrorException,
     BadRequestException,
     NotFoundException,
+    UseGuards,
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Types } from 'mongoose';
+import { JwtAuthGuard } from 'src/users/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('appointments')
 export class AppointmentsController {
     constructor(private readonly appointmentsService: AppointmentsService) {}
