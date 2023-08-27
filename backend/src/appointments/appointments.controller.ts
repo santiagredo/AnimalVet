@@ -34,7 +34,7 @@ export class AppointmentsController {
     }
 
     @Get()
-    async findAllAppointmnets() {
+    async findAllAppointments() {
         try {
             return this.appointmentsService.findAllAppointments();
         } catch (error) {
